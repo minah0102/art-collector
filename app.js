@@ -16,7 +16,7 @@ async function fetchObjects() {
   }
 }
 
-fetchObjects().then((x) => console.log(x)); // { info: {}, records: [{}, {},]}
+fetchObjects().then((x) => console.log(x));
 
 async function fetchAllCenturies() {
   const url = `${BASE_URL}/century?${KEY}&size=100&sort=temporalorder`;
@@ -64,18 +64,13 @@ async function prefetchCategoryLists() {
     ]);
     $(".classification-count").text(`(${classifications.length})`);
     classifications.forEach((classification) => {
-      // append a correctly formatted option tag into
-      // the element with id select-classification
       $("#select-classification").append(
         `<option value="${classification.name}">${classification.name}</option>`
       );
     });
 
-    // This provides a clue to the user, that there are items in the dropdown
     $(".century-count").text(`(${centuries.length})`);
     centuries.forEach((century) => {
-      // append a correctly formatted option tag into
-      // the element with id select-century
       $("#select-century").append(
         $(`<option value="${century.name}">${century.name}</option>`)
       );
@@ -124,25 +119,13 @@ function renderPreview(record) {
 function updatePreview(records, info) {
   const root = $("#preview");
   const results = $(".results");
-  root.find(results).empty();
-  //results.empty();
-  console.log(records);
+  const resultEl = root.find(results)
+  resultEl.empty();
+  
   records.forEach((record) => {
-    results.append(renderPreview(record));
+    resultEl.append(renderPreview(record));
   });
-  /*
-    if info.next is present:
-      - on the .next button set data with key url equal to info.next
-      - also update the disabled attribute to false
-    else
-      - set the data url to null
-      - update the disabled attribute to true
 
-
-    Do the same for info.prev, with the .previous button
-  */
-
-  // your loop from the last section
   if (info.next) {
     root.find(".next").data("url", info.next).attr("disabled", false);
   } else {
@@ -214,12 +197,6 @@ function searchURL(searchType, searchString) {
 }
 
 function factHTML(title, content, searchTerm = null) {
-  // if content is empty or undefined, return an empty string ''
-
-  // otherwise, if there is no searchTerm, return the two spans
-
-  // otherwise, return the two spans, with the content wrapped in an anchor tag
-
   if (!content) {
     return "";
   } else if (!searchTerm) {
@@ -233,23 +210,6 @@ function factHTML(title, content, searchTerm = null) {
     }&${searchTerm}=${encodeURI(content.split("-").join("|"))}>
     ${content}</span>`;
   }
-
-  //   if (!content) {
-  //     return "";
-  //   } else {
-  //     return `
-  //   <span class="title">${title}</span>
-  //   <span class="content">${
-  //     searchTerm && content
-  //       ? `<a href="${API.ROOT}/${API.RESOURCES.OBJECT}?${
-  //           API.KEY
-  //         }&${searchTerm}=${encodeURI(content.split("-").join("|"))}">
-  //         ${content}</a>`
-  //       : content
-  //   }
-  //   </span>
-  // `;
-  //   }
 }
 
 function photosHTML(images, primaryimageurl) {
@@ -301,7 +261,6 @@ $("#preview").on("click", ".object-preview", function (event) {
 });
 
 $("#feature").on("click", "a", async function (event) {
-  // read href off of $(this) with the .attr() method
   const href = $(this).attr("href");
   if (href.startsWith("mailto:")) {
     return;
@@ -318,5 +277,4 @@ $("#feature").on("click", "a", async function (event) {
     onFetchEnd();
   }
 });
-//updatePreview;
 prefetchCategoryLists();
